@@ -6,7 +6,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 const axios = require("axios");
 
-export default function PasswordAdder() {
+export default function PasswordAdder(props) {
   const [submitted, setSubmitted] = useState(false);
   const [authToken, setAuthToken] = useState();
   const apiEndpoint = "http://localhost:" + (process.env.PORT || 3001);
@@ -23,6 +23,10 @@ export default function PasswordAdder() {
       website: data.get("website"),
       username: data.get("username"),
       password: data.get("password"),
+    }
+    if (props.savedSites.includes(reqBody.website)) {
+      alert("You already have a saved login for " + reqBody.website);
+      return;
     }
     try {
       const res = await axios.post(

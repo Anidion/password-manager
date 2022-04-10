@@ -185,7 +185,7 @@ export default function PasswordGetter() {
         Save a password:
       </Typography>
 
-      <PasswordAdder sx={{ mb: 2 }} />
+      <PasswordAdder savedSites={savedSites} sx={{ mb: 2 }} />
 
       <Modal open={showEditPop}>
         <Box sx={popupStyle}>
