@@ -20,7 +20,7 @@ const theme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const [emailTaken, setEmailTaken] = useState("false");
+  const [emailTaken, setEmailTaken] = useState(false);
   const apiEndpoint = "http://localhost:" + (process.env.PORT || 3001);
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,6 +36,7 @@ export default function SignUp() {
     }
     if (pass2.length < 8) {
       alert("Password must be at least 8 characters");
+      return;
     }
 
     const reqBody = {
@@ -49,12 +50,13 @@ export default function SignUp() {
       const response = await axios
         .post(apiEndpoint + "/signup", reqBody)
         .then((res) => {
-          if (res.status === 200) navigate("/")
-          else if (res.status === 400) setEmailTaken(true)
+          if (res.data.status === 200) navigate("/")
+          localStorage.setItem("user", response.data.token);
         });
-      localStorage.setItem("user", response.data.token);
     } catch (error) {
       console.log(error);
+      console.log(error.response.status);
+      setEmailTaken(true);
     }
   };
 
@@ -114,7 +116,7 @@ export default function SignUp() {
                   autoComplete="email"
                 />
               </Grid>
-              {!emailTaken ? <Typography color="error" sx={{ml: 3 ,mt:2}}>Email address taken.</Typography> : null}
+              {emailTaken ? <Typography color="error" sx={{ml: 3 ,mt:2}}>Email address taken.</Typography> : null}
               <Grid item xs={12}>
                 <TextField
                   required
